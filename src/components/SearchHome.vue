@@ -14,11 +14,13 @@
                 </div>
             </div>
         </div>
+        <div>Currection: {{ correction }}</div>
     </div>
 </template>
 
 <script lang="ts">
     import { Component, Prop, Vue } from 'vue-property-decorator';
+    import axios from 'axios';
 
     @Component({
         components: {
@@ -29,9 +31,16 @@
         searchTitle: String = 'MySearchEngine'
         searchPlaceholder: String = 'Insert your search phrase here...';
         searchInput: String = '';
+        apiUrl: string = 'http://127.0.0.1:5000/spellingcorrector';
+        correction: String = '';
 
         onSearchClick() {
             console.log(this.searchInput);
+            axios.post(this.apiUrl, {
+                word: this.searchInput
+            }).then((response) => {
+                this.correction = response.data.suggestion
+            })
         }
 
         clearSearchInput() {
